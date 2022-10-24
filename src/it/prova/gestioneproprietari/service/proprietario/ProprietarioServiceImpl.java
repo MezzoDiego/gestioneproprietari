@@ -158,8 +158,22 @@ public class ProprietarioServiceImpl implements ProprietarioService {
 
 	@Override
 	public int contaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa(Integer anno) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		// questo è come una connection
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			proprietarioDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return proprietarioDAO.countHowManyProprietariHaveCarsWithYearOfRegistrationSince(anno);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
 	}
 
 }

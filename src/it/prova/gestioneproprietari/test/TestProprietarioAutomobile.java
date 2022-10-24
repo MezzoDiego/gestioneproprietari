@@ -26,10 +26,11 @@ public class TestProprietarioAutomobile {
 			System.out.println("------------------------------------------------------------");
 			// testInserisciAutomobile(proprietarioService, automobileService);
 			System.out.println("------------------------------------------------------------");
-			//testRimozioneAutomobile(proprietarioService, automobileService);
+			// testRimozioneAutomobile(proprietarioService, automobileService);
 			System.out.println("------------------------------------------------------------");
-			//testUpdateProprietario(proprietarioService);
+			// testUpdateProprietario(proprietarioService);
 			System.out.println("------------------------------------------------------------");
+			testContaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa(proprietarioService, automobileService);
 			System.out.println("------------------------------------------------------------");
 			System.out.println("------------------------------------------------------------");
 
@@ -200,6 +201,56 @@ public class TestProprietarioAutomobile {
 		proprietarioService.rimuovi(nuovoProprietario);
 
 		System.out.println(".......testUpdateProprietario fine.............");
+
+	}
+
+	private static void testContaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa(
+			ProprietarioService proprietarioService, AutomobileService automobileService) throws Exception {
+
+		System.out.println(
+				".......testContaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa inizio.............");
+
+		// creo nuovo proprietario
+		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2022");
+		Proprietario nuovoProprietario = new Proprietario("Diego", "Mezzo", "MZZDGI02R01I608P", dataNascita);
+		if (nuovoProprietario.getId() != null)
+			throw new RuntimeException("testInserisciProprietario fallito: record già presente ");
+
+		// salvo
+		proprietarioService.inserisciNuovo(nuovoProprietario);
+		// da questa riga in poi il record, se correttamente inserito, ha un nuovo id
+		// (NOVITA' RISPETTO AL PASSATO!!!)
+		if (nuovoProprietario.getId() == null)
+			throw new RuntimeException("testInserisciProprietario fallito ");
+
+		List<Proprietario> listaProprietariPresenti = proprietarioService.listAllProprietari();
+		if (listaProprietariPresenti.isEmpty())
+			throw new RuntimeException("testRimozioneAutomobile fallito: non ci sono proprietari a cui collegarci ");
+
+		Automobile nuovaAutomobile = new Automobile("Nissan", "Qashqai", "DX407FR", 2010);
+		// lo lego al primo proprietario che trovo
+		nuovaAutomobile.setProprietario(listaProprietariPresenti.get(0));
+
+		// salvo la nuova automobile
+		automobileService.inserisciNuovo(nuovaAutomobile);
+
+		// esecuzione query
+		Integer annoImmatricolazionePerTest = 2005;
+		int quantiProprietariPossiedonoAnnoImmatricolazioneMaggioreDi = proprietarioService
+				.contaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa(annoImmatricolazionePerTest);
+
+		// check visivo
+		System.out.println("\n ################ TEST VISIVO ###############");
+		System.out.println("\n Numero proprietari aventi automobili con anno di immatricolazione maggiore di "
+				+ annoImmatricolazionePerTest + ": " + quantiProprietariPossiedonoAnnoImmatricolazioneMaggioreDi);
+		System.out.println("\n ############################################");
+
+		// reset tabella
+		automobileService.rimuovi(nuovaAutomobile.getId());
+		proprietarioService.rimuovi(nuovoProprietario);
+
+		System.out.println(
+				".......testContaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa fine.............");
 
 	}
 

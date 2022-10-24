@@ -54,11 +54,14 @@ public class ProprietarioDAOImpl implements ProprietarioDAO {
 		entityManager.remove(entityManager.merge(proprietarioInstance));
 
 	}
-
+//"select *, count(a) from Proprietario p left join fetch p.automobili a where a.annoimmatricolazione"
 	@Override
 	public int countHowManyProprietariHaveCarsWithYearOfRegistrationSince(Integer anno) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		TypedQuery<Long> query = entityManager
+				.createQuery("select count(proprietario_id) from Automobile where annoimmatricolazione >= ?1", Long.class);
+		query.setParameter(1, anno);
+		
+		return query.getSingleResult().intValue();
 	}
 
 	@Override
