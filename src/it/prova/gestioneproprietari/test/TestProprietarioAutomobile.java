@@ -36,7 +36,7 @@ public class TestProprietarioAutomobile {
 			//testVoglioListaAutomobiliICuiProprietariHannoCodiceFiscaleCheIniziaPer(proprietarioService,
 			//		automobileService);
 			System.out.println("------------------------------------------------------------");
-			testVoglioListaConErrori(proprietarioService, automobileService);
+			//testVoglioListaConErrori(proprietarioService, automobileService);
 
 		} catch (Throwable e) {
 			e.printStackTrace();
