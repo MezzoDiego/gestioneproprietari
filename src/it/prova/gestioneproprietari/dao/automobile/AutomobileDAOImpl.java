@@ -69,8 +69,9 @@ public class AutomobileDAOImpl implements AutomobileDAO {
 
 	@Override
 	public List<Automobile> giveMeAutomobiliWithErrors() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.createQuery(
+				"from Automobile a left join fetch a.proprietario where year(current_date()) - year(datadinascita) <= 18",
+				Automobile.class).getResultList();
 	}
 
 }

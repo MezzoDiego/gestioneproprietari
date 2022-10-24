@@ -33,9 +33,10 @@ public class TestProprietarioAutomobile {
 			// testContaQuantiProprietariPossiedonoAutomobileConAnnoImmatricolazioneDa(proprietarioService,
 			// automobileService);
 			System.out.println("------------------------------------------------------------");
-			testVoglioListaAutomobiliICuiProprietariHannoCodiceFiscaleCheIniziaPer(proprietarioService,
-					automobileService);
+			//testVoglioListaAutomobiliICuiProprietariHannoCodiceFiscaleCheIniziaPer(proprietarioService,
+			//		automobileService);
 			System.out.println("------------------------------------------------------------");
+			testVoglioListaConErrori(proprietarioService, automobileService);
 
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -80,7 +81,7 @@ public class TestProprietarioAutomobile {
 
 		// creo nuova automobile ma prima mi serve un proprietario
 		// creo nuovo proprietario
-		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2022");
+		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2012");
 		Proprietario nuovoProprietario = new Proprietario("Diego", "Mezzo", "MZZDGI02R01I608P", dataNascita);
 		if (nuovoProprietario.getId() != null)
 			throw new RuntimeException("testInserisciProprietario fallito: record già presente ");
@@ -304,6 +305,53 @@ public class TestProprietarioAutomobile {
 
 		System.out.println(
 				".......testVoglioListaAutomobiliICuiProprietariHannoCodiceFiscaleCheIniziaPer fine.............");
+	}
+
+	private static void testVoglioListaConErrori(ProprietarioService proprietarioService,
+			AutomobileService automobileService) throws Exception {
+		System.out.println(".......testVoglioListaConErrori inizio.............");
+
+		// creo nuovo proprietario
+		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2009");
+		Proprietario nuovoProprietario = new Proprietario("Diego", "Mezzo", "MZZDGI02R01I608P", dataNascita);
+		if (nuovoProprietario.getId() != null)
+			throw new RuntimeException("testInserisciProprietario fallito: record già presente ");
+
+		// salvo
+		proprietarioService.inserisciNuovo(nuovoProprietario);
+		// da questa riga in poi il record, se correttamente inserito, ha un nuovo id
+		// (NOVITA' RISPETTO AL PASSATO!!!)
+		if (nuovoProprietario.getId() == null)
+			throw new RuntimeException("testInserisciProprietario fallito ");
+
+		List<Proprietario> listaProprietariPresenti = proprietarioService.listAllProprietari();
+		if (listaProprietariPresenti.isEmpty())
+			throw new RuntimeException("testRimozioneAutomobile fallito: non ci sono proprietari a cui collegarci ");
+
+		Automobile nuovaAutomobile = new Automobile("Nissan", "Qashqai", "DX407FR", 2010);
+		// lo lego al primo proprietario che trovo
+		nuovaAutomobile.setProprietario(listaProprietariPresenti.get(0));
+
+		// salvo la nuova automobile
+		automobileService.inserisciNuovo(nuovaAutomobile);
+
+		if (nuovaAutomobile.getId() == null)
+			throw new RuntimeException("testInserisciAutomobile fallito ");
+
+		// esecuzione query di ricerca
+		List<Automobile> listaDiAutomobiliIcuiProprietariSonoMinorenni = automobileService.voglioListaConErrori();
+
+		// check visivo
+		System.out.println("\n ################ TEST VISIVO ###############");
+		System.out.println("\n" + listaDiAutomobiliIcuiProprietariSonoMinorenni);
+		System.out.println("\n ############################################");
+
+		// reset tabella
+		automobileService.rimuovi(nuovaAutomobile.getId());
+		proprietarioService.rimuovi(nuovoProprietario);
+
+		System.out.println(".......testVoglioListaConErrori fine.............");
+
 	}
 
 }
