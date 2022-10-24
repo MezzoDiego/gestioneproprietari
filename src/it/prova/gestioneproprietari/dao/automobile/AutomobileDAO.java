@@ -7,7 +7,7 @@ import it.prova.gestioneproprietari.model.Automobile;
 
 public interface AutomobileDAO extends IBaseDAO<Automobile> {
 
-	public List<Automobile> giveMeAutomobiliWithProprietariWhoseCFBeginsWith(String input) throws Exception;
+	public List<Automobile> giveMeAutomobilisProprietariWhoseCFBeginsWith(String input) throws Exception;
 
 	public List<Automobile> giveMeAutomobiliWithErrors() throws Exception;
 

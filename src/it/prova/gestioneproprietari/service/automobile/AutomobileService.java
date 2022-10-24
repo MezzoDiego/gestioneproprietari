@@ -19,7 +19,7 @@ public interface AutomobileService {
 	// per injection
 	public void setAutomobileDAO(AutomobileDAO automobileDAO);
 
-	public List<Automobile> voglioListaAutomobiliConProprietariIlCuiCodiceFiscaleIniziaPer(String input) throws Exception;
+	public List<Automobile> voglioListaAutomobiliICuiProprietariHannoCodiceFiscaleCheIniziaPer(String input) throws Exception;
 
 	public List<Automobile> voglioListaConErrori() throws Exception;
 

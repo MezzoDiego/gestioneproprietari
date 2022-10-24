@@ -136,16 +136,44 @@ public class AutomobileServiceImpl implements AutomobileService {
 	}
 
 	@Override
-	public List<Automobile> voglioListaAutomobiliConProprietariIlCuiCodiceFiscaleIniziaPer(String input)
+	public List<Automobile> voglioListaAutomobiliICuiProprietariHannoCodiceFiscaleCheIniziaPer(String input)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		// questo è come una connection
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			automobileDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return automobileDAO.giveMeAutomobilisProprietariWhoseCFBeginsWith(input);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
 	}
 
 	@Override
 	public List<Automobile> voglioListaConErrori() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		// questo è come una connection
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			automobileDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return automobileDAO.giveMeAutomobiliWithErrors();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
 	}
 
 }
