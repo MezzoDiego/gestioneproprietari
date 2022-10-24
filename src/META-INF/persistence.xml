@@ -4,9 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
         version="2.2">
-	<persistence-unit name="municipio_abitante_unit" transaction-type="RESOURCE_LOCAL">
-		<class>it.prova.municipioabitantejpa.model.Abitante</class>
-		<class>it.prova.municipioabitantejpa.model.Municipio</class>
+	<persistence-unit name="proprietario_automobile_unit" transaction-type="RESOURCE_LOCAL">
+		<class>it.prova.gestioneproprietari.model.Automobile</class>
+		<class>it.prova.gestioneproprietari.model.Proprietario</class>
 		<properties>
 			<!-- setup con MySql -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
